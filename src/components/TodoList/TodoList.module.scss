@@ -1,0 +1,26 @@
+.header {
+  list-style-type: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &__item {
+    // margin-right: 25px;
+    width: 200px;
+  }
+}
+
+.todoList {
+    list-style-type: none;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.span {
+    width: 200px;
+}
