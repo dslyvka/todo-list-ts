@@ -1,3 +1,5 @@
+import styles from './CreateTodo.module.scss';
+
 interface ITodoInput {
   containerClass?: string;
 
@@ -9,7 +11,7 @@ interface ITodoInput {
 }
 
 export default function TodoInput(props: ITodoInput) {
-  const { containerClass = "", labelClass, labelText, value, setValue } = props;
+  const { containerClass = '', labelClass, labelText, value, setValue } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.currentTarget.value);
@@ -22,6 +24,7 @@ export default function TodoInput(props: ITodoInput) {
         {labelText}
       </label>
       <input
+        className={styles.input}
         type="text"
         name={labelText}
         value={value}

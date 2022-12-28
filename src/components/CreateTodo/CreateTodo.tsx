@@ -29,7 +29,7 @@ const CreateTodo = observer(() => {
   };
 
   return (
-    <form action="">
+    <form className={styles.form}>
       <div className={styles.container}>
         <TodoInput
           containerClass={styles.container__title}

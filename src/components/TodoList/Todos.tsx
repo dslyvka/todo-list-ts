@@ -35,10 +35,10 @@ const Todos = observer(() => {
         {items.todos.map((item, index) => (
           <li key={item.id} onClick={e => onTodoClick(e, item.id)}>
             <p className={styles.container}>
-              <span className={styles.span}>{index}</span>
+              <span className={styles.span}>#{index}</span>
               <span className={styles.span}>{item.title}</span>
               <span className={styles.span}>{item.description}</span>
-              <span className={styles.span}>
+              <span className={styles.span }>
                 <input
                   type="checkbox"
                   onClick={e => {

@@ -1,3 +1,7 @@
+.div__container {
+  width: 700px;
+}
+
 .header {
   list-style-type: none;
 
@@ -7,20 +11,34 @@
 
   &__item {
     // margin-right: 25px;
-    width: 200px;
+    width: 150px;
   }
+
+  margin-bottom: 25px;
 }
 
 .todoList {
     list-style-type: none;
+  //  padding-left: 0;
 }
 
 .container {
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  background-color: #bfdbf7;
+
+  margin-bottom: 10px;
 }
 
 .span {
-    width: 200px;
+    width: 150px;
+
+    // &__input {
+    //   display: flex;
+    //   justify-content: center;
+    //   align-items: center;
+    // }
 }
+
