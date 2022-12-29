@@ -6,30 +6,18 @@ interface ITodoInput {
   labelText: string;
   labelClass: string;
 
-  value: string;
-  setValue: (value: string) => void;
+  Ref: React.LegacyRef<HTMLInputElement>;
 }
 
-export default function TodoInput(props: ITodoInput) {
-  const { containerClass = '', labelClass, labelText, value, setValue } = props;
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.currentTarget.value);
-    // console.log(e.target.value);
-  };
+export const TodoInput = (props: ITodoInput) => {
+  const { containerClass = '', labelClass, labelText, Ref } = props;
 
   return (
     <div className={containerClass}>
       <label className={labelClass} htmlFor={labelText}>
         {labelText}
       </label>
-      <input
-        className={styles.input}
-        type="text"
-        name={labelText}
-        value={value}
-        onChange={handleChange}
-      />
+      <input className={styles.input} type="text" name={labelText} ref={Ref} />
     </div>
   );
-}
+};

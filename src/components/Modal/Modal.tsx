@@ -1,19 +1,16 @@
+import { todos } from 'store/Todos';
+
 import styles from './Modal.module.scss';
 
-import items from '../../store/Todos';
-
 interface IModal {
-  isOpen: boolean;
   onClose: () => void;
 
   id: string;
 }
 
-const Modal = (props: IModal) => {
-  const { isOpen, onClose, id } = props;
-  const todo = items.getTodo(id);
-
-  if (!isOpen) return <></>;
+export const Modal = (props: IModal) => {
+  const { onClose, id } = props;
+  const todo = todos.getTodo(id);
 
   return (
     <div className={styles.modal} onClick={onClose}>
@@ -36,5 +33,3 @@ const Modal = (props: IModal) => {
     </div>
   );
 };
-export default Modal;
-
