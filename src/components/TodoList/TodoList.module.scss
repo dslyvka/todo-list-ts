@@ -17,8 +17,25 @@
   margin-bottom: 25px;
 }
 
+.label {
+  margin-right: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
+  padding: 5px;
+
+  border: none;
+  border-radius: 2px;
+
+  margin-right: 10px;
+}
+
 .todoList {
-    list-style-type: none;
+  list-style-type: none;
   //  padding-left: 0;
 }
 
@@ -33,12 +50,12 @@
 }
 
 .span {
-    width: 150px;
+  width: 150px;
+}
 
-    // &__input {
-    //   display: flex;
-    //   justify-content: center;
-    //   align-items: center;
-    // }
+.inputsContainer {
+  display: flex;
+
+  align-items: center;
 }
 

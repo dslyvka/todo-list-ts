@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { todos as items } from '../../store/Todos';
 
 import { Modal } from '../Modal/Modal';
@@ -17,7 +18,7 @@ interface ITodos {
   todos: TTodo[];
 }
 
-export const Todos = ({ todos }: ITodos) => {
+export const Todos = observer(({ todos }: ITodos) => {
   const [isOpen, openModal] = useState(false);
   const [todoId, setTodoId] = useState('');
 
@@ -45,7 +46,7 @@ export const Todos = ({ todos }: ITodos) => {
         {todos.map((item: TTodo, index: number) => (
           <li key={item.id} onClick={e => onTodoClick(e, item.id)}>
             <p className={styles.container}>
-              <span className={styles.span}>#{index+1}</span>
+              <span className={styles.span}>#{index + 1}</span>
               <span className={styles.span}>{item.title}</span>
               <span className={styles.span}>{item.description}</span>
               <span className={styles.span}>
@@ -63,6 +64,6 @@ export const Todos = ({ todos }: ITodos) => {
       {isOpen && <Modal id={todoId} onClose={onModalClose} />}
     </>
   );
-};
+});
 
 export default Todos;
