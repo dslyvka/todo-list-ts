@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -10,12 +10,11 @@ import { Header } from './Header';
 import styles from './TodoList.module.scss';
 
 export const TodoList = observer(() => {
-  const [isSorted, setIsSorted] = useState<boolean>(false);
+  const [isSorted, setIsSorted] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const todos = items.searchTodos(searchValue);
-  const sortedTodos = items.getSortedTodos();
-  const sortedAndFilteredTodos = items.getSortedAndFilteredTodos(searchValue);
+  const todos = items.searchAndSortTodos(searchValue, isSorted, isFiltered);
 
   return (
     <>
@@ -23,21 +22,10 @@ export const TodoList = observer(() => {
         <Header
           onSort={setIsSorted}
           onSearch={setSearchValue}
+          onFilter={setIsFiltered}
           searchValue={searchValue}
         />
-        {todos.length ? (
-          <Todos
-            todos={
-              isSorted
-                ? searchValue
-                  ? sortedAndFilteredTodos
-                  : sortedTodos
-                : todos
-            }
-          />
-        ) : (
-          <p>No todos yet</p>
-        )}
+        {todos.length ? <Todos todos={todos} /> : <p>No todos yet</p>}
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
@@ -16,7 +16,7 @@ export const CreateTodo = observer(() => {
 
   const onClick: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
-    if (!title || !description) return;
+    if (!title.current!.value || !description.current!.value) return;
 
     const todo = {
       title: title.current!.value,

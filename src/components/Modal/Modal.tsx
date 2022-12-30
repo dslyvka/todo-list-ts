@@ -19,7 +19,6 @@ export const Modal = (props: IModal) => {
         <p className={styles.d}>Description:</p>
         <p>{todo.description}</p>
         <p className={styles.s}>
-          Status:{' '}
           <span className={styles.status}>
             {todo.status ? 'done' : 'not ready'}
           </span>

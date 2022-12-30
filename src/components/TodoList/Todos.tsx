@@ -23,8 +23,8 @@ export const Todos = observer(({ todos }: ITodos) => {
   const [todoId, setTodoId] = useState('');
 
   const onTodoClick = (e: React.MouseEvent, id: string) => {
-    const input = (e.target as HTMLInputElement).tagName;
-    if (input === 'INPUT') return;
+    const target = (e.target as HTMLInputElement).tagName;
+    if (target === 'INPUT' || target === "BUTTON") return;
 
     console.log('Click');
     setTodoId(id);
@@ -57,6 +57,19 @@ export const Todos = observer(({ todos }: ITodos) => {
                   }}
                 />
               </span>
+
+              <button type="button" className={styles.btn}>
+                Edit
+              </button>
+              <button
+                type="button"
+                className={styles.btn}
+                onClick={() => {
+                  items.deleteTodo(item.id);
+                }}
+              >
+                Delete
+              </button>
             </p>
           </li>
         ))}

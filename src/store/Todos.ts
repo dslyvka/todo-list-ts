@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import { v4 as uuid } from 'uuid';
 
 type TTodo = {
   title: string;
@@ -22,17 +21,18 @@ class Todos {
   addTodo(todo: TTodo) {
     const { id } = todo;
     this.todos[id] = todo;
-    // console.log(todo);
-    // console.log(toJS(this.todos));
   }
 
   changeStatus(id: string) {
     this.todos[id].status = !this.todos[id].status;
-    // console.log(toJS(this.todos));
   }
 
   getTodo(id: string): TTodo {
     return this.todos[id];
+  }
+
+  getTodos() {
+    return Object.values(this.todos);
   }
 
   deleteTodo(id: string) {
@@ -48,19 +48,30 @@ class Todos {
     return this.getTodos();
   }
 
-  getSortedTodos() {
-    const todos = this.getTodos();
+  getSortedTodos(todos: TTodo[]) {
     return todos.sort((a, b) => a.title.localeCompare(b.title));
   }
 
-  getSortedAndFilteredTodos(value: string) {
-    const todos = this.searchTodos(value);
-    todos.sort((a, b) => a.title.localeCompare(b.title));
-    return todos.filter(todo => todo.title.includes(value));
+  getDoneTodos(todos: TTodo[]) {
+    return todos.filter(todo => todo.status === true);
   }
 
-  getTodos() {
-    return Object.values(this.todos);
+  searchAndSortTodos(value: string, sort?: boolean, filter?: boolean) {
+    const searchedTodos = this.searchTodos(value);
+    if (sort && filter) {
+      const sorted = this.getSortedTodos(searchedTodos);
+      const filtered = this.getDoneTodos(sorted);
+      return filtered;
+    }
+    if (filter) {
+      const filtered = this.getDoneTodos(searchedTodos);
+      return filtered;
+    }
+    if (sort) {
+      const sorted = this.getSortedTodos(searchedTodos);
+      return sorted;
+    }
+    return searchedTodos;
   }
 }
 

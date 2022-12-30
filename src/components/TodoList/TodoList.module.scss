@@ -59,3 +59,20 @@
   align-items: center;
 }
 
+.btn {
+  width: 100px;
+  height: 25px;
+  padding: 2px 15px;
+
+  background-color: #fff;
+
+  border: none;
+
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
+}
+
+
