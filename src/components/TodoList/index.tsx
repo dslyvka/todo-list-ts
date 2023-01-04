@@ -18,7 +18,7 @@ export const TodoList = observer(() => {
 
   return (
     <>
-      <div className={styles.div__container}>
+      <div className={styles.divContainer}>
         <Header
           onSort={setIsSorted}
           onSearch={setSearchValue}

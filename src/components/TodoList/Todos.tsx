@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { observer } from 'mobx-react-lite';
 import { todos as items } from '../../store/Todos';
 
-import { Modal } from '../Modal/Modal';
+import { TodoModal } from './Modals/TodoModal';
+import { EditTodoModal } from './Modals/EditTodoModal';
 
 import styles from './TodoList.module.scss';
 
@@ -19,62 +20,76 @@ interface ITodos {
 }
 
 export const Todos = observer(({ todos }: ITodos) => {
-  const [isOpen, openModal] = useState(false);
+  const { changeStatus, deleteTodo } = items;
+
+  const [isTodoModal, setTodoModal] = useState(false);
+  const [isEditTodoModal, setEditTodoModal] = useState(false);
   const [todoId, setTodoId] = useState('');
 
-  const onTodoClick = (e: React.MouseEvent, id: string) => {
-    const target = (e.target as HTMLInputElement).tagName;
-    if (target === 'INPUT' || target === "BUTTON") return;
+  const onTodoClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const targetTag = target.tagName;
+    const id = target.id;
 
-    console.log('Click');
+    if (targetTag === 'INPUT') {
+      changeStatus(id);
+      return;
+    }
+
+    if (targetTag === 'BUTTON') {
+      if (target.textContent === 'Delete') {
+        deleteTodo(id);
+        return;
+      } else if (target.textContent === 'Edit') {
+        setTodoId(id);
+        setEditTodoModal(!isEditTodoModal);
+        return;
+      }
+    }
+
     setTodoId(id);
-    openModal(!isOpen);
-    console.log(e.target);
+    setTodoModal(!isTodoModal);
   };
 
-  const onModalClose = () => {
-    openModal(!isOpen);
+  const onTodoModalClose = () => {
+    setTodoModal(!isTodoModal);
   };
 
-  const onCheckboxClick = (id: string) => {
-    items.changeStatus(id);
+  const onEditTodoModalClose = () => {
+    setEditTodoModal(!isEditTodoModal);
   };
 
   return (
     <>
-      <ul className={styles.todoList}>
+      <ul className={styles.todoList} onClick={onTodoClick}>
         {todos.map((item: TTodo, index: number) => (
-          <li key={item.id} onClick={e => onTodoClick(e, item.id)}>
+          <li key={item.id} id={item.id}>
             <p className={styles.container}>
-              <span className={styles.span}>#{index + 1}</span>
-              <span className={styles.span}>{item.title}</span>
-              <span className={styles.span}>{item.description}</span>
-              <span className={styles.span}>
+              <span>#{index + 1}</span>
+              <span className={styles.containerTitle}>{item.title}</span>
+              <span>{item.description}</span>
+              <span className={styles.inputsContainer}>
                 <input
                   type="checkbox"
-                  onClick={() => {
-                    onCheckboxClick(item.id);
-                  }}
+                  id={item.id}
+                  className={styles.checkbox}
                 />
               </span>
 
-              <button type="button" className={styles.btn}>
+              <button type="button" className={styles.btn} id={item.id}>
                 Edit
               </button>
-              <button
-                type="button"
-                className={styles.btn}
-                onClick={() => {
-                  items.deleteTodo(item.id);
-                }}
-              >
+              <button type="button" className={styles.btn} id={item.id}>
                 Delete
               </button>
             </p>
           </li>
         ))}
       </ul>
-      {isOpen && <Modal id={todoId} onClose={onModalClose} />}
+      {isTodoModal && <TodoModal id={todoId} onClose={onTodoModalClose} />}
+      {isEditTodoModal && (
+        <EditTodoModal id={todoId} onClose={onEditTodoModalClose} />
+      )}
     </>
   );
 });

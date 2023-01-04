@@ -1,3 +1,5 @@
+import { debounce } from 'components/utils/debounce';
+
 import styles from './TodoList.module.scss';
 
 interface IHeader {
@@ -22,12 +24,16 @@ export const Header = ({
     onFilter(e.currentTarget.checked);
   };
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    onSearch(e.currentTarget.value);
+  const debouncedSearch = debounce((value: string) => {
+    onSearch(value);
+  }, 50);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSearch(e.currentTarget.value);
   };
 
   return (
-    <div className={styles.div__container}>
+    <div className={styles.divContainer}>
       <div className={styles.inputsContainer}>
         <label htmlFor="Search todos" className={styles.label}>
           Search todos:
@@ -36,34 +42,40 @@ export const Header = ({
           type="text"
           name="Search todos"
           className={styles.input}
+          // onChange={e => {
+          //   debounce(() => {
+          //     onSearch(e.currentTarget.value);
+          //   }, 50)();
+          // }}
           onChange={onChange}
           value={searchValue}
         />
 
         <label htmlFor="Filter todos" className={styles.label}>
-          Filter:
+          Show done todos:
           <input
             type="checkbox"
-            name="Filter todos"
+            name="filter todos"
             id=""
             onClick={onFilterClick}
+            className={styles.checkbox}
           />
         </label>
       </div>
 
       <ul className={styles.header}>
-        <li className={styles.header__item}>id</li>
-        <li className={styles.header__item + ' ' + styles.label}>
+        <li>id</li>
+        <li className={styles.label}>
           Title
           <input
             type="checkbox"
-            name="Sort todos"
-            className={styles.input}
+            name="sort todos"
+            className={styles.checkbox}
             onClick={onSortClick}
           />
         </li>
-        <li className={styles.header__item}>Description</li>
-        <li className={styles.header__item}>Status</li>
+        <li>Description</li>
+        <li>Status</li>
       </ul>
     </div>
   );

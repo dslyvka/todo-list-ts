@@ -13,30 +13,13 @@
   top: 0;
   left: 0;
 
-  &__content {
+  &Content {
     padding: 15px;
     width: 500px;
     height: 250px;
 
     background-color: #e1e5f2;
   }
-}
-
-.title {
-  text-align: center;
-}
-
-.s {
-  margin-bottom: 50px;
-}
-
-.d,
-.s {
-  color: grey;
-}
-
-.status {
-  color: black;
 }
 
 .btn {
@@ -48,9 +31,13 @@
 
   border: none;
 
-  &__container {
+  cursor: pointer;
+
+  &Container {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    margin-bottom: 10px;
   }
 }

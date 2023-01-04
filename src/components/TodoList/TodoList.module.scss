@@ -1,18 +1,8 @@
-.div__container {
-  width: 700px;
-}
-
 .header {
   list-style-type: none;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  &__item {
-    // margin-right: 25px;
-    width: 150px;
-  }
+  grid-template-columns: 40px 300px 300px 40px;
+  display: grid;
 
   margin-bottom: 25px;
 }
@@ -34,33 +24,38 @@
   margin-right: 10px;
 }
 
+.checkbox {
+  cursor: pointer;
+
+  pointer-events: visible;
+}
+
 .todoList {
   list-style-type: none;
-  //  padding-left: 0;
 }
 
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
+  grid-template-columns: 40px 300px 300px 40px 120px 120px;
+  display: grid;
 
   background-color: #bfdbf7;
 
   margin-bottom: 10px;
-}
 
-.span {
-  width: 150px;
+  pointer-events: none;
+
+  &Title {
+    text-align: center;
+  }
 }
 
 .inputsContainer {
   display: flex;
-
+  justify-content: center;
   align-items: center;
 }
 
 .btn {
-  width: 100px;
   height: 25px;
   padding: 2px 15px;
 
@@ -73,6 +68,6 @@
   &:not(:last-child) {
     margin-right: 5px;
   }
+
+  pointer-events: visible;
 }
-
-

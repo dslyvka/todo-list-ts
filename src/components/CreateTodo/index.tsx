@@ -5,46 +5,42 @@ import { v4 as uuid } from 'uuid';
 
 import { todos } from 'store/Todos';
 
-import { TodoInput } from './TodoInput';
+import { Input } from 'components/Input';
+
 import styles from './CreateTodo.module.scss';
 
 export const CreateTodo = observer(() => {
-  // const { addTodo } = todos;
+  const { addTodo } = todos;
 
-  const title = useRef<HTMLInputElement>(null);
-  const description = useRef<HTMLInputElement>(null);
-
-  const onClick: React.FormEventHandler<HTMLFormElement> = e => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
-    if (!title.current!.value || !description.current!.value) return;
+
+    const form = new FormData(e.currentTarget);
+    const title = form.get('title') as string;
+    const description = form.get('description') as string;
+
+    if (!title || !description) return;
 
     const todo = {
-      title: title.current!.value,
-      description: description.current!.value,
+      title,
+      description,
       status: false,
       id: uuid(),
     };
-    // debugger;
-    todos.addTodo(todo);
+    addTodo(todo);
 
     e.currentTarget.reset();
   };
 
   return (
-    <form className={styles.form} onSubmit={onClick}>
+    <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.container}>
-        <TodoInput
-          containerClass={styles.container__title}
+        <Input
+          containerClass={styles.containerInputTitle}
           labelText="Title"
-          labelClass={styles.label}
-          Ref={title}
+          inputName="title"
         />
-
-        <TodoInput
-          labelText="Description"
-          labelClass={styles.label}
-          Ref={description}
-        />
+        <Input labelText="Description" inputName="description" />
       </div>
 
       <button type="submit" className={styles.btn}>
