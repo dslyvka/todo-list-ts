@@ -29,7 +29,7 @@ export const Todos = observer(({ todos }: ITodos) => {
   const onTodoClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     const targetTag = target.tagName;
-    const id = target.id;
+    const id = target.dataset.id as string;
 
     if (targetTag === 'INPUT') {
       changeStatus(id);
@@ -63,7 +63,7 @@ export const Todos = observer(({ todos }: ITodos) => {
     <>
       <ul className={styles.todoList} onClick={onTodoClick}>
         {todos.map((item: TTodo, index: number) => (
-          <li key={item.id} id={item.id}>
+          <li key={item.id} data-id={item.id}>
             <p className={styles.container}>
               <span>#{index + 1}</span>
               <span className={styles.containerTitle}>{item.title}</span>
@@ -71,15 +71,15 @@ export const Todos = observer(({ todos }: ITodos) => {
               <span className={styles.inputsContainer}>
                 <input
                   type="checkbox"
-                  id={item.id}
+                  data-id={item.id}
                   className={styles.checkbox}
                 />
               </span>
 
-              <button type="button" className={styles.btn} id={item.id}>
+              <button type="button" className={styles.btn} data-id={item.id}>
                 Edit
               </button>
-              <button type="button" className={styles.btn} id={item.id}>
+              <button type="button" className={styles.btn} data-id={item.id}>
                 Delete
               </button>
             </p>

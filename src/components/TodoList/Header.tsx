@@ -1,3 +1,5 @@
+import { useMemo, useCallback } from 'react';
+
 import { debounce } from 'components/utils/debounce';
 
 import styles from './TodoList.module.scss';
@@ -32,6 +34,19 @@ export const Header = ({
     debouncedSearch(e.currentTarget.value);
   };
 
+  // const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   onSearch(event.target.value);
+  // };
+
+  // const debouncedChangeHandler = useMemo(() => {
+  //   return debounce(changeHandler, 300);
+  // }, []);
+
+  // const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   onSearch(event.target.value);
+  // };
+  // const debouncedChangeHandler = useCallback(debounce(changeHandler, 300), []);
+
   return (
     <div className={styles.divContainer}>
       <div className={styles.inputsContainer}>
@@ -47,6 +62,7 @@ export const Header = ({
           //     onSearch(e.currentTarget.value);
           //   }, 50)();
           // }}
+          // onKeyDown={onChange}
           onChange={onChange}
           value={searchValue}
         />

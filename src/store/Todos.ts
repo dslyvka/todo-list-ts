@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 
 type TTodo = {
   title: string;
@@ -26,6 +26,7 @@ class Todos {
   addTodo = (todo: TTodo) => {
     const { id } = todo;
     this.todos[id] = todo;
+    // console.log(toJS(this.todos));
   };
 
   changeStatus = (id: string) => {

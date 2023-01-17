@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
 
@@ -27,6 +25,7 @@ export const CreateTodo = observer(() => {
       status: false,
       id: uuid(),
     };
+
     addTodo(todo);
 
     e.currentTarget.reset();
