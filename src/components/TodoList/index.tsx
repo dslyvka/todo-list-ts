@@ -15,6 +15,7 @@ type TTodo = {
   description: string;
   status: boolean;
   id: string;
+  checked: boolean;
 };
 
 function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
@@ -27,6 +28,8 @@ export const TodoList = observer(() => {
   const [searchValue, setSearchValue] = useState('');
 
   const todos = items.searchAndSortTodos(searchValue, isSorted, isFiltered);
+  const [checkedTodos, setCheckedTodos] = useState<Set<string>>(new Set());
+  const [checkAll, setCheckAll] = useState(false);
 
   const [todosPerPage, setTodosPerPage] = useState(5);
   const totalPageCount = Math.ceil(todos.length / todosPerPage);
@@ -41,9 +44,17 @@ export const TodoList = observer(() => {
           onSearch={setSearchValue}
           onFilter={setIsFiltered}
           searchValue={searchValue}
+          checkedTodos={checkedTodos}
+          checkAll={checkAll}
+          setCheckAll={setCheckAll}
         />
         {todosOnPage.length ? (
-          <Todos todos={todosOnPage} />
+          <Todos
+            checkedTodos={checkedTodos}
+            todos={todosOnPage}
+            checkAll={checkAll}
+            setCheckAll={setCheckAll}
+          />
         ) : (
           <p>No todos yet</p>
         )}

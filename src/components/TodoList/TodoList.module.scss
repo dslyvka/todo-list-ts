@@ -1,10 +1,46 @@
 .header {
   list-style-type: none;
 
-  grid-template-columns: 40px 300px 300px 40px;
+  grid-template-columns: 20px 20px 300px 300px 40px;
   display: grid;
 
   margin-bottom: 25px;
+
+  &CheckSome {
+    background: rgb(34, 193, 195);
+    background: linear-gradient(
+      0deg,
+      rgba(34, 193, 195, 1) 0%,
+      rgba(255, 255, 255, 1) 40%
+    );
+    // background-color: black;
+    width: 20px;
+    height: 20px;
+  }
+
+  &CheckAll {
+    background: rgb(34, 193, 195);
+    background: linear-gradient(
+      0deg,
+      rgba(34, 193, 195, 1) 0%,
+      rgba(255, 255, 255, 1) 150%
+    );
+    // background-color: black;
+    width: 20px;
+    height: 20px;
+  }
+
+  &NoChecked {
+    background: rgb(34, 193, 195);
+    background: linear-gradient(
+      0deg,
+      rgba(34, 193, 195, 1) 0%,
+      rgba(255, 255, 255, 1) 0%
+    );
+    // background-color: black;
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .label {
@@ -35,7 +71,7 @@
 }
 
 .container {
-  grid-template-columns: 40px 300px 300px 40px 120px 120px;
+  grid-template-columns: 20px 20px 300px 300px 40px 120px 120px;
   display: grid;
 
   background-color: #bfdbf7;

@@ -5,6 +5,7 @@ type TTodo = {
   description: string;
   status: boolean;
   id: string;
+  checked: boolean;
 };
 
 interface ITodos {
@@ -48,6 +49,10 @@ class Todos {
   editTodo = (id: string, todo: IEditTodo) => {
     this.todos[id] = { ...this.todos[id], ...todo };
   };
+
+  checkTodo = (id: string, checked: boolean) => { 
+    this.todos[id] = { ...this.todos[id], checked };
+  }
 
   searchTodos = (value: string) => {
     if (value) {

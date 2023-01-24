@@ -24,6 +24,7 @@ export const CreateTodo = observer(() => {
       description,
       status: false,
       id: uuid(),
+      checked: false,
     };
 
     addTodo(todo);
