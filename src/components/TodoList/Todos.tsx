@@ -61,24 +61,24 @@ export const Todos = observer(
     };
 
     const onCheck: React.ChangeEventHandler<HTMLInputElement> = e => {
-      if (e.target.dataset.checked) {
-        console.log(checkedTodos.has(e.target.dataset.checked));
-        if (checkedTodos.has(e.target.dataset.checked)) {
-          console.log(e.target.dataset.checked + ' unchecked');
-          checkedTodos.delete(e.target.dataset.checked);
-          checkTodo(e.target.dataset.checked, false);
+      const checkedId = e.target.dataset.checked;
+      if (checkedId) {
+        // console.log(checkedTodos.has(checkedId));
+        if (checkedTodos.has(checkedId)) {
+          // console.log(checkedId + ' unchecked');
+          checkedTodos.delete(checkedId);
+          checkTodo(checkedId, false);
           setCheckAll(false);
-          console.log(checkedTodos);
+          // console.log(checkedTodos);
           return;
         }
-        console.log(e.target.dataset.checked + ' checked');
-        checkedTodos.add(e.target.dataset.checked);
-        checkTodo(e.target.dataset.checked, true);
+        // console.log(checkedId + ' checked');
+        checkedTodos.add(checkedId);
+        checkTodo(checkedId, true);
         if (checkedTodos.size === getTodos().length && getTodos().length) {
           setCheckAll(true);
         }
-
-        console.log(checkedTodos);
+        // console.log(checkedTodos);
         return;
       }
     };
