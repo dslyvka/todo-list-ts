@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
@@ -16,6 +16,7 @@ type TTodo = {
   status: boolean;
   id: string;
   checked: boolean;
+  order: number;
 };
 
 function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
@@ -34,7 +35,14 @@ export const TodoList = observer(() => {
   const [todosPerPage, setTodosPerPage] = useState(5);
   const totalPageCount = Math.ceil(todos.length / todosPerPage);
   const [currentPage, setCurrentPage] = useState(1);
-  const todosOnPage: TTodo[] = sliceTodos(todos, currentPage, todosPerPage);
+
+  // const [todosOnPage, setTodosOnPage] = useState(
+  //   sliceTodos(todos, currentPage, todosPerPage)
+  // );
+  const todosOnPage = sliceTodos(todos, currentPage, todosPerPage);
+
+  // const todosOnPage: TTodo[] = sliceTodos(todos, currentPage, todosPerPage);
+  console.log(todosOnPage);
 
   return (
     <>
@@ -54,6 +62,7 @@ export const TodoList = observer(() => {
             todos={todosOnPage}
             checkAll={checkAll}
             setCheckAll={setCheckAll}
+            // setTodosOnPage={setTodosOnPage}
           />
         ) : (
           <p>No todos yet</p>

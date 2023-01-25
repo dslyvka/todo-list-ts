@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
 
@@ -9,6 +11,7 @@ import styles from './CreateTodo.module.scss';
 
 export const CreateTodo = observer(() => {
   const { addTodo } = todos;
+  const [order, setOrder] = useState(1);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
@@ -25,9 +28,11 @@ export const CreateTodo = observer(() => {
       status: false,
       id: uuid(),
       checked: false,
+      order,
     };
 
     addTodo(todo);
+    setOrder(order + 1);
 
     e.currentTarget.reset();
   };

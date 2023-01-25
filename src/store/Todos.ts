@@ -6,6 +6,7 @@ type TTodo = {
   status: boolean;
   id: string;
   checked: boolean;
+  order: number;
 };
 
 interface ITodos {
@@ -34,6 +35,15 @@ class Todos {
     this.todos[id].status = !this.todos[id].status;
   };
 
+  changeOrder = (todo: TTodo, draggedTodo: TTodo, currentTodo: TTodo) => {
+    if (todo.id === draggedTodo.id) {
+      this.todos[todo.id] = { ...todo, order: currentTodo!.order };
+    }
+    if (todo.id === currentTodo!.id) {
+      this.todos[todo.id] = { ...todo, order: draggedTodo.order };
+    }
+  };
+
   getTodo = (id: string) => {
     return this.todos[id];
   };
@@ -50,9 +60,9 @@ class Todos {
     this.todos[id] = { ...this.todos[id], ...todo };
   };
 
-  checkTodo = (id: string, checked: boolean) => { 
+  checkTodo = (id: string, checked: boolean) => {
     this.todos[id] = { ...this.todos[id], checked };
-  }
+  };
 
   searchTodos = (value: string) => {
     if (value) {

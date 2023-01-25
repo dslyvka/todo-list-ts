@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import { toJS } from 'mobx';
 import { todos as items } from '../../store/Todos';
 
 import { TodoModal } from './Modals/TodoModal';
@@ -14,6 +15,7 @@ type TTodo = {
   status: boolean;
   id: string;
   checked: boolean;
+  order: number;
 };
 
 interface ITodos {
@@ -21,11 +23,13 @@ interface ITodos {
   checkedTodos: Set<string>;
   checkAll: boolean;
   setCheckAll: (value: boolean) => void;
+  // setTodosOnPage: (value: TTodo[]) => void;
 }
 
 export const Todos = observer(
   ({ todos, checkedTodos, checkAll, setCheckAll }: ITodos) => {
-    const { changeStatus, deleteTodo, checkTodo, getTodos } = items;
+    const { changeStatus, deleteTodo, checkTodo, getTodos, changeOrder } =
+      items;
 
     const [isTodoModal, setTodoModal] = useState(false);
     const [isEditTodoModal, setEditTodoModal] = useState(false);
@@ -91,43 +95,94 @@ export const Todos = observer(
       setEditTodoModal(!isEditTodoModal);
     };
 
+    const [currentTodo, setCurrentTodo] = useState<null | TTodo>(null);
+
+    const onDragStart = (e: React.DragEvent<HTMLLIElement>, item: TTodo) => {
+      console.log(toJS(item));
+      setCurrentTodo(item);
+    };
+
+    const onDrop = (e: React.DragEvent<HTMLLIElement>, item: TTodo) => {
+      e.preventDefault();
+      // setTodosOnPage(
+      // setDraggedTodos(
+      todos.forEach(todo => {
+        changeOrder(todo, item, currentTodo!);
+      });
+      // );
+      console.log(toJS(item));
+      console.log(todos);
+    };
+
     return (
       <>
         <ul className={styles.todoList} onClick={onTodoClick}>
-          {todos.map((item: TTodo, index: number) => (
-            <li key={item.id} data-id={item.id}>
-              <p className={styles.container}>
-                <span>
-                  <input
-                    type="checkbox"
-                    name=""
-                    id=""
-                    className={styles.checkbox}
-                    data-checked={item.id}
-                    checked={checkAll ? true : item.checked}
-                    onChange={onCheck}
-                  />
-                </span>
-                <span>#{index + 1}</span>
-                <span className={styles.containerTitle}>{item.title}</span>
-                <span>{item.description}</span>
-                <span className={styles.inputsContainer}>
-                  <input
-                    type="checkbox"
-                    data-id={item.id}
-                    className={styles.checkbox}
-                  />
-                </span>
+          {todos
+            .sort((a, b) => (a.order > b.order ? 1 : -1))
+            .map((item: TTodo) => (
+              <li
+                key={item.id}
+                data-id={item.id}
+                className={styles.li}
+                draggable={true}
+                onDragStart={e => {
+                  onDragStart(e, item);
+                }}
+                onDragLeave={e => {
+                  e.currentTarget.style.background = '#bfdbf7';
+                }}
+                onDragEnd={e => {
+                  e.currentTarget.style.background = '#bfdbf7';
+                }}
+                onDragOver={e => {
+                  e.preventDefault();
+                  e.currentTarget.style.background = 'lightgray';
+                }}
+                onDrop={e => {
+                  onDrop(e, item);
+                  e.currentTarget.style.background = '#bfdbf7';
+                }}
+              >
+                <p className={styles.container}>
+                  <span>
+                    <input
+                      type="checkbox"
+                      name=""
+                      id=""
+                      className={styles.checkbox}
+                      data-checked={item.id}
+                      checked={checkAll ? true : item.checked}
+                      onChange={onCheck}
+                    />
+                  </span>
+                  <span>#{item.order}</span>
+                  <span className={styles.containerTitle}>{item.title}</span>
+                  <span>{item.description}</span>
+                  <span className={styles.inputsContainer}>
+                    <input
+                      type="checkbox"
+                      data-id={item.id}
+                      className={styles.checkbox}
+                    />
+                  </span>
 
-                <button type="button" className={styles.btn} data-id={item.id}>
-                  Edit
-                </button>
-                <button type="button" className={styles.btn} data-id={item.id}>
-                  Delete
-                </button>
-              </p>
-            </li>
-          ))}
+                  <button
+                    type="button"
+                    className={styles.btn}
+                    data-id={item.id}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.btn}
+                    data-id={item.id}
+                  >
+                    Delete
+                  </button>
+                </p>
+              </li>
+            ))}
         </ul>
         {isTodoModal && <TodoModal id={todoId} onClose={onTodoModalClose} />}
         {isEditTodoModal && (
@@ -137,5 +192,3 @@ export const Todos = observer(
     );
   }
 );
-
-export default Todos;
