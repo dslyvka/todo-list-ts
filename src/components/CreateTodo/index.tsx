@@ -12,6 +12,7 @@ import styles from './CreateTodo.module.scss';
 export const CreateTodo = observer(() => {
   const { addTodo } = todos;
   const [order, setOrder] = useState(1);
+  const [number, setNumber] = useState(1);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
@@ -29,10 +30,12 @@ export const CreateTodo = observer(() => {
       id: uuid(),
       checked: false,
       order,
+      number,
     };
 
     addTodo(todo);
     setOrder(order + 1);
+    setNumber(number + 1);
 
     e.currentTarget.reset();
   };

@@ -16,6 +16,7 @@ type TTodo = {
   id: string;
   checked: boolean;
   order: number;
+  number: number;
 };
 
 interface ITodos {
@@ -155,7 +156,7 @@ export const Todos = observer(
                       onChange={onCheck}
                     />
                   </span>
-                  <span>#{item.order}</span>
+                  <span>#{item.number}</span>
                   <span className={styles.containerTitle}>{item.title}</span>
                   <span>{item.description}</span>
                   <span className={styles.inputsContainer}>

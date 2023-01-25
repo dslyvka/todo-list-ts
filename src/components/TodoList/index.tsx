@@ -17,6 +17,7 @@ type TTodo = {
   id: string;
   checked: boolean;
   order: number;
+  number: number;
 };
 
 function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
