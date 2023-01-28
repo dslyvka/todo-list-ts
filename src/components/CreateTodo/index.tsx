@@ -10,9 +10,9 @@ import { Input } from 'components/Input';
 import styles from './CreateTodo.module.scss';
 
 export const CreateTodo = observer(() => {
-  const { addTodo } = todos;
-  const [order, setOrder] = useState(1);
-  const [number, setNumber] = useState(1);
+  const { addTodo, getTodos, getOrder, getNumber, setOrder, setNumber } = todos;
+  const order = getOrder();
+  const number = getNumber();
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
@@ -34,8 +34,10 @@ export const CreateTodo = observer(() => {
     };
 
     addTodo(todo);
+    // console.log(number);
     setOrder(order + 1);
     setNumber(number + 1);
+    // console.log(getNumber());
 
     e.currentTarget.reset();
   };

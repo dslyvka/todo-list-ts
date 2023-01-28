@@ -21,10 +21,28 @@ interface IEditTodo {
 
 class Todos {
   todos: ITodos = {};
+  order: number = 1;
+  number: number = 1;
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setOrder = (order: number) => {
+    this.order = order;
+  };
+
+  getOrder = () => {
+    return this.order;
+  };
+
+  setNumber = (number: number) => {
+    this.number = number;
+  };
+
+  getNumber = () => {
+    return this.number;
+  };
 
   addTodo = (todo: TTodo) => {
     const { id } = todo;
@@ -55,6 +73,14 @@ class Todos {
 
   deleteTodo = (id: string) => {
     delete this.todos[id];
+    this.getTodos().forEach((todo, index) => {
+      if (index + 1 !== this.todos[todo.id].number) {
+        this.todos[todo.id] = { ...this.todos[todo.id], number: index + 1 };
+      }
+      if (index + 1 !== this.todos[todo.id].order) {
+        this.todos[todo.id] = { ...this.todos[todo.id], order: index + 1 };
+      }
+    });
   };
 
   editTodo = (id: string, todo: IEditTodo) => {

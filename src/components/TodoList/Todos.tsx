@@ -24,28 +24,56 @@ interface ITodos {
   checkedTodos: Set<string>;
   checkAll: boolean;
   setCheckAll: (value: boolean) => void;
-  // setTodosOnPage: (value: TTodo[]) => void;
 }
 
 export const Todos = observer(
   ({ todos, checkedTodos, checkAll, setCheckAll }: ITodos) => {
-    const { changeStatus, deleteTodo, checkTodo, getTodos, changeOrder } =
-      items;
+    const {
+      changeStatus,
+      deleteTodo,
+      checkTodo,
+      getTodos,
+      changeOrder,
+      getOrder,
+      getNumber,
+      setOrder,
+      setNumber,
+    } = items;
 
     const [isTodoModal, setTodoModal] = useState(false);
     const [isEditTodoModal, setEditTodoModal] = useState(false);
     const [todoId, setTodoId] = useState('');
+
+
+
+    const onCheck = (checkedId: string) => {
+      if (checkedId) {
+        if (checkedTodos.has(checkedId)) {
+          checkedTodos.delete(checkedId);
+          checkTodo(checkedId, false);
+          setCheckAll(false);
+          return;
+        }
+        checkedTodos.add(checkedId);
+        checkTodo(checkedId, true);
+        if (checkedTodos.size === getTodos().length && getTodos().length) {
+          setCheckAll(true);
+        }
+        return;
+      }
+    };
 
     const onTodoClick = (e: React.MouseEvent) => {
       const target = e.target as HTMLElement;
       const targetTag = target.tagName;
       const id = target.dataset.id as string;
 
-      if (targetTag === 'INPUT') {
-        if (target.dataset.checked) {
-          return;
-        }
+      if (targetTag === 'INPUT' && target.dataset.checked) {
+        onCheck(target.dataset.checked);
+        return;
+      }
 
+      if (targetTag === 'INPUT') {
         changeStatus(id);
         return;
       }
@@ -53,6 +81,8 @@ export const Todos = observer(
       if (targetTag === 'BUTTON') {
         if (target.textContent === 'Delete') {
           deleteTodo(id);
+          setOrder(getOrder() - 1);
+          setNumber(getNumber() - 1);
           return;
         } else if (target.textContent === 'Edit') {
           setTodoId(id);
@@ -63,29 +93,6 @@ export const Todos = observer(
 
       setTodoId(id);
       setTodoModal(!isTodoModal);
-    };
-
-    const onCheck: React.ChangeEventHandler<HTMLInputElement> = e => {
-      const checkedId = e.target.dataset.checked;
-      if (checkedId) {
-        // console.log(checkedTodos.has(checkedId));
-        if (checkedTodos.has(checkedId)) {
-          // console.log(checkedId + ' unchecked');
-          checkedTodos.delete(checkedId);
-          checkTodo(checkedId, false);
-          setCheckAll(false);
-          // console.log(checkedTodos);
-          return;
-        }
-        // console.log(checkedId + ' checked');
-        checkedTodos.add(checkedId);
-        checkTodo(checkedId, true);
-        if (checkedTodos.size === getTodos().length && getTodos().length) {
-          setCheckAll(true);
-        }
-        // console.log(checkedTodos);
-        return;
-      }
     };
 
     const onTodoModalClose = () => {
@@ -105,14 +112,9 @@ export const Todos = observer(
 
     const onDrop = (e: React.DragEvent<HTMLLIElement>, item: TTodo) => {
       e.preventDefault();
-      // setTodosOnPage(
-      // setDraggedTodos(
       todos.forEach(todo => {
         changeOrder(todo, item, currentTodo!);
       });
-      // );
-      console.log(toJS(item));
-      console.log(todos);
     };
 
     return (
@@ -152,8 +154,8 @@ export const Todos = observer(
                       id=""
                       className={styles.checkbox}
                       data-checked={item.id}
-                      checked={checkAll ? true : item.checked}
-                      onChange={onCheck}
+                      checked={item.checked}
+                      readOnly={true}
                     />
                   </span>
                   <span>#{item.number}</span>
@@ -164,6 +166,8 @@ export const Todos = observer(
                       type="checkbox"
                       data-id={item.id}
                       className={styles.checkbox}
+                      checked={item.status}
+                      readOnly={true}
                     />
                   </span>
 

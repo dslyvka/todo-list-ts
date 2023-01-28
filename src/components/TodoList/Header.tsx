@@ -5,6 +5,17 @@ import { todos as items } from '../../store/Todos';
 import { debounce } from 'components/utils/debounce';
 
 import styles from './TodoList.module.scss';
+import { setSyntheticLeadingComments } from 'typescript';
+
+type TTodo = {
+  title: string;
+  description: string;
+  status: boolean;
+  id: string;
+  checked: boolean;
+  order: number;
+  number: number;
+};
 
 interface IHeader {
   onSort: (value: boolean) => void;
@@ -15,6 +26,7 @@ interface IHeader {
   searchValue: string;
   checkedTodos: Set<string>;
   checkAll: boolean;
+  todosOnPage: TTodo[];
 }
 
 export const Header = ({
@@ -24,9 +36,18 @@ export const Header = ({
   searchValue,
   checkedTodos,
   checkAll,
+  todosOnPage,
   setCheckAll,
 }: IHeader) => {
-  const { getTodos, deleteTodo, checkTodo } = items;
+  const {
+    getTodos,
+    deleteTodo,
+    checkTodo,
+    setNumber,
+    setOrder,
+    getOrder,
+    getNumber,
+  } = items;
 
   const [styleTag, setStyleTag] = useState<string>(styles.headerNoChecked);
 
@@ -38,29 +59,33 @@ export const Header = ({
     } else {
       setStyleTag(styles.headerNoChecked);
     }
-  }, [checkedTodos.size]);
-
-  // console.log(styleTag);
+  }, [checkedTodos.size, checkAll]);
 
   const onDeleteAll = () => {
+    setStyleTag(styles.headerNoChecked);
+    setCheckAll(false);
     getTodos().forEach(todo => {
       deleteTodo(todo.id);
     });
+    setOrder(1);
+    setNumber(1);
   };
 
   const onDeleteChecked = () => {
     setStyleTag(styles.headerNoChecked);
     setCheckAll(false);
-    checkedTodos.forEach(checkedTodo => {
-      deleteTodo(checkedTodo);
+    todosOnPage.forEach(todo => {
+      if (todo.checked) deleteTodo(todo.id);
     });
+    setOrder(getOrder() - checkedTodos.size);
+    setNumber(getNumber() - checkedTodos.size);
   };
 
   const onCheckAll: React.MouseEventHandler<HTMLInputElement> = e => {
     if (!e.currentTarget.checked) {
       setCheckAll(e.currentTarget.checked);
       setStyleTag(styles.headerNoChecked);
-      getTodos().forEach(todo => {
+      todosOnPage.forEach(todo => {
         checkTodo(todo.id, false);
         checkedTodos.delete(todo.id);
       });
@@ -68,7 +93,8 @@ export const Header = ({
       return;
     }
     setCheckAll(e.currentTarget.checked);
-    getTodos().forEach(todo => {
+    setStyleTag(styles.headerCheckAll);
+    todosOnPage.forEach(todo => {
       checkTodo(todo.id, true);
       checkedTodos.add(todo.id);
     });
@@ -160,7 +186,7 @@ export const Header = ({
               type="checkbox"
               onClick={onCheckAll}
               disabled={getTodos().length ? false : true}
-              checked={checkAll ? true : false}
+              checked={checkAll}
             />
           </div>
         </li>

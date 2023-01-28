@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 import { todos as items } from 'store/Todos';
 
@@ -14,8 +14,9 @@ interface iPagination {
   totalPageCount: number;
   currentPage: number;
 
-  setTodosPerPage: React.Dispatch<React.SetStateAction<number>>;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setTodosPerPage: (value: number) => void;
+  setCurrentPage: (value: number) => void;
+  setCheckAll: (value: boolean) => void;
 }
 
 const range = (start: number, end: number) => {
@@ -95,6 +96,7 @@ export const Pagination = (props: iPagination) => {
 
     setTodosPerPage,
     setCurrentPage,
+    setCheckAll,
   } = props;
 
   const paginationBtns = useMemo(() => {
@@ -152,6 +154,11 @@ export const Pagination = (props: iPagination) => {
 
     return [];
   }, [currentPage, totalPageCount, todosPerPage]);
+
+  // useEffect(() => {
+  //   setCheckAll(false);
+  // }, [currentPage]);
+  
 
   const onSelect: React.ChangeEventHandler<HTMLSelectElement> = e => {
     const value = parseInt(e.target.value);

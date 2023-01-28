@@ -25,6 +25,7 @@ function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
 }
 
 export const TodoList = observer(() => {
+
   const [isSorted, setIsSorted] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -37,9 +38,6 @@ export const TodoList = observer(() => {
   const totalPageCount = Math.ceil(todos.length / todosPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // const [todosOnPage, setTodosOnPage] = useState(
-  //   sliceTodos(todos, currentPage, todosPerPage)
-  // );
   const todosOnPage = sliceTodos(todos, currentPage, todosPerPage);
 
   // const todosOnPage: TTodo[] = sliceTodos(todos, currentPage, todosPerPage);
@@ -56,6 +54,7 @@ export const TodoList = observer(() => {
           checkedTodos={checkedTodos}
           checkAll={checkAll}
           setCheckAll={setCheckAll}
+          todosOnPage={todosOnPage}
         />
         {todosOnPage.length ? (
           <Todos
@@ -75,6 +74,7 @@ export const TodoList = observer(() => {
             setTodosPerPage={setTodosPerPage}
             todosPerPage={todosPerPage}
             totalPageCount={totalPageCount}
+            setCheckAll={setCheckAll}
           />
         ) : (
           <></>
