@@ -34,10 +34,9 @@ export const CreateTodo = observer(() => {
     };
 
     addTodo(todo);
-    // console.log(number);
+
     setOrder(order + 1);
     setNumber(number + 1);
-    // console.log(getNumber());
 
     e.currentTarget.reset();
   };

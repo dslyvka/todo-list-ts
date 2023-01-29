@@ -21,33 +21,19 @@ type TTodo = {
 
 interface ITodos {
   todos: TTodo[];
-  checkedTodos: Set<string>;
-  checkAll: boolean;
-  checkedCounter: number;
 
   setCheckAll: (value: boolean) => void;
   setCheckAction: (value: symbol) => void;
   setUncheckAction: (value: symbol) => void;
-  setCheckedCounter: (value: number) => void;
 }
 
 export const Todos = observer(
-  ({
-    todos,
-    checkedTodos,
-    checkAll,
-    setCheckAll,
-    setCheckAction,
-    setUncheckAction,
-    setCheckedCounter,
-    checkedCounter,
-  }: ITodos) => {
+  ({ todos, setCheckAll, setCheckAction, setUncheckAction }: ITodos) => {
     const {
       changeStatus,
       deleteTodo,
       checkTodo,
       getTodo,
-      getTodos,
       changeOrder,
       getOrder,
       getNumber,
@@ -66,8 +52,6 @@ export const Todos = observer(
         setUncheckAction(Symbol('action'));
         setCheckAll(false);
       }
-      // else setCheckedCounter(checkedCounter + 1);
-
       return;
     };
 

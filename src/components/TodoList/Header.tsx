@@ -21,9 +21,10 @@ interface IHeader {
   onSearch: (value: string) => void;
   onFilter: (value: boolean) => void;
   setCheckAll: (value: boolean) => void;
+  setDeleteCheckedAction: (value: symbol) => void;
+  setCheckedCounter: (value: number) => void;
 
   searchValue: string;
-  checkedTodos: Set<string>;
   checkAll: boolean;
   todosOnPage: TTodo[];
   checkedCounter: number;
@@ -34,11 +35,12 @@ export const Header = ({
   onSearch,
   onFilter,
   searchValue,
-  checkedTodos,
   checkAll,
   todosOnPage,
   checkedCounter,
   setCheckAll,
+  setDeleteCheckedAction,
+  setCheckedCounter,
 }: IHeader) => {
   const {
     getTodos,
@@ -50,13 +52,13 @@ export const Header = ({
     getNumber,
   } = items;
 
-  const [styleTag, setStyleTag] = useState<string>(styles.headerNoChecked);
+  const [styleTag, setStyleTag] = useState(styles.headerNoChecked);
 
   useEffect(() => {
-    if (checkedCounter === todosOnPage.length && checkedCounter) {
+    if (checkedCounter === todosOnPage.length && checkedCounter > 0) {
       setStyleTag(styles.headerCheckAll);
       setCheckAll(true);
-    } else if (checkedCounter < todosOnPage.length && checkedCounter) {
+    } else if (checkedCounter < todosOnPage.length && checkedCounter > 0) {
       setStyleTag(styles.headerCheckSome);
     } else {
       setStyleTag(styles.headerNoChecked);
@@ -71,16 +73,19 @@ export const Header = ({
     });
     setOrder(1);
     setNumber(1);
+    setCheckedCounter(0);
   };
 
   const onDeleteChecked = () => {
     setStyleTag(styles.headerNoChecked);
     setCheckAll(false);
+    setDeleteCheckedAction(Symbol('action'));
     todosOnPage.forEach(todo => {
       if (todo.checked) deleteTodo(todo.id);
     });
-    setOrder(getOrder() - checkedTodos.size);
-    setNumber(getNumber() - checkedTodos.size);
+    setOrder(getOrder() - checkedCounter);
+    setNumber(getNumber() - checkedCounter);
+    setCheckedCounter(0);
   };
 
   const onCheckAll: React.MouseEventHandler<HTMLInputElement> = e => {
@@ -89,8 +94,8 @@ export const Header = ({
       setStyleTag(styles.headerNoChecked);
       todosOnPage.forEach(todo => {
         checkTodo(todo.id, false);
-        checkedTodos.delete(todo.id);
       });
+      setCheckedCounter(0);
       console.log('checkAll');
       return;
     }
@@ -98,7 +103,6 @@ export const Header = ({
     setStyleTag(styles.headerCheckAll);
     todosOnPage.forEach(todo => {
       checkTodo(todo.id, true);
-      checkedTodos.add(todo.id);
     });
     console.log('checkAll');
   };
@@ -139,7 +143,7 @@ export const Header = ({
           <button
             className={styles.btn}
             onClick={onDeleteChecked}
-            disabled={checkedTodos.size ? false : true}
+            disabled={!checkedCounter ? true : false}
           >
             Delete checked
           </button>

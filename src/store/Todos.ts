@@ -73,13 +73,17 @@ class Todos {
 
   deleteTodo = (id: string) => {
     delete this.todos[id];
-    this.getTodos().forEach((todo, index) => {
+    this.getTodos().forEach((todo, index, array) => {
       if (index + 1 !== this.todos[todo.id].number) {
         this.todos[todo.id] = { ...this.todos[todo.id], number: index + 1 };
       }
       if (index + 1 !== this.todos[todo.id].order) {
         this.todos[todo.id] = { ...this.todos[todo.id], order: index + 1 };
       }
+      // if (index + 1 === array.length) {
+      //   this.setOrder(index + 2);
+      //   this.setNumber(index + 2);
+      // }
     });
   };
 

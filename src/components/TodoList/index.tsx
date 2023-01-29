@@ -30,15 +30,19 @@ export const TodoList = observer(() => {
   const [searchValue, setSearchValue] = useState('');
 
   const todos = items.searchAndSortTodos(searchValue, isSorted, isFiltered);
-  const [checkedTodos, setCheckedTodos] = useState<Set<string>>(new Set());
   const [checkAll, setCheckAll] = useState(false);
 
   const [todosPerPage, setTodosPerPage] = useState(5);
   const totalPageCount = Math.ceil(todos.length / todosPerPage);
   const [currentPage, setCurrentPage] = useState(1);
+
   const [checkedCounter, setCheckedCounter] = useState(0);
+
   const [checkAction, setCheckAction] = useState(Symbol('action'));
   const [uncheckAction, setUncheckAction] = useState(Symbol('action'));
+  const [deleteCheckedAction, setDeleteCheckedAction] = useState(
+    Symbol('action')
+  );
 
   const todosOnPage = sliceTodos(todos, currentPage, todosPerPage);
 
@@ -52,15 +56,14 @@ export const TodoList = observer(() => {
         count++;
       }
     }
-    if (count === todosOnPage.length && checkedCounter) setCheckAll(true);
+    if (count === todosOnPage.length && checkedCounter > 0) setCheckAll(true);
+    else setCheckAll(false);
     setCheckedCounter(count);
-  }, [currentPage]);
+  }, [currentPage, deleteCheckedAction]);
 
   useEffect(() => {
-    // console.log('uncheck');
     if (checkedCounter) {
       setCheckedCounter(checkedCounter - 1);
-      // setCheckAll(false);
     }
   }, [uncheckAction]);
 
@@ -71,12 +74,6 @@ export const TodoList = observer(() => {
     }
   }, [checkAction]);
 
-  // useEffect(() => {
-  //   checkedOnPages[currentPage] = checkedCounter;
-  //   // setCheckedOnPages([...checkedOnPages]);
-  //   console.log(checkedOnPages[currentPage]);
-  // }, [checkedCounter]);
-
   return (
     <>
       <div className={styles.divContainer}>
@@ -85,22 +82,19 @@ export const TodoList = observer(() => {
           onSearch={setSearchValue}
           onFilter={setIsFiltered}
           searchValue={searchValue}
-          checkedTodos={checkedTodos}
           checkAll={checkAll}
           setCheckAll={setCheckAll}
           todosOnPage={todosOnPage}
           checkedCounter={checkedCounter}
+          setDeleteCheckedAction={setDeleteCheckedAction}
+          setCheckedCounter={setCheckedCounter}
         />
         {todosOnPage.length ? (
           <Todos
-            checkedTodos={checkedTodos}
             todos={todosOnPage}
-            checkAll={checkAll}
             setCheckAll={setCheckAll}
             setCheckAction={setCheckAction}
             setUncheckAction={setUncheckAction}
-            setCheckedCounter={setCheckedCounter}
-            checkedCounter={checkedCounter}
           />
         ) : (
           <p>No todos yet</p>
