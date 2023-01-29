@@ -23,15 +23,30 @@ interface ITodos {
   todos: TTodo[];
   checkedTodos: Set<string>;
   checkAll: boolean;
+  checkedCounter: number;
+
   setCheckAll: (value: boolean) => void;
+  setCheckAction: (value: symbol) => void;
+  setUncheckAction: (value: symbol) => void;
+  setCheckedCounter: (value: number) => void;
 }
 
 export const Todos = observer(
-  ({ todos, checkedTodos, checkAll, setCheckAll }: ITodos) => {
+  ({
+    todos,
+    checkedTodos,
+    checkAll,
+    setCheckAll,
+    setCheckAction,
+    setUncheckAction,
+    setCheckedCounter,
+    checkedCounter,
+  }: ITodos) => {
     const {
       changeStatus,
       deleteTodo,
       checkTodo,
+      getTodo,
       getTodos,
       changeOrder,
       getOrder,
@@ -44,23 +59,16 @@ export const Todos = observer(
     const [isEditTodoModal, setEditTodoModal] = useState(false);
     const [todoId, setTodoId] = useState('');
 
-
-
     const onCheck = (checkedId: string) => {
-      if (checkedId) {
-        if (checkedTodos.has(checkedId)) {
-          checkedTodos.delete(checkedId);
-          checkTodo(checkedId, false);
-          setCheckAll(false);
-          return;
-        }
-        checkedTodos.add(checkedId);
-        checkTodo(checkedId, true);
-        if (checkedTodos.size === getTodos().length && getTodos().length) {
-          setCheckAll(true);
-        }
-        return;
+      checkTodo(checkedId, !getTodo(checkedId).checked);
+      if (getTodo(checkedId).checked) setCheckAction(Symbol('action'));
+      else {
+        setUncheckAction(Symbol('action'));
+        setCheckAll(false);
       }
+      // else setCheckedCounter(checkedCounter + 1);
+
+      return;
     };
 
     const onTodoClick = (e: React.MouseEvent) => {

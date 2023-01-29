@@ -25,7 +25,6 @@ function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
 }
 
 export const TodoList = observer(() => {
-
   const [isSorted, setIsSorted] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -37,11 +36,46 @@ export const TodoList = observer(() => {
   const [todosPerPage, setTodosPerPage] = useState(5);
   const totalPageCount = Math.ceil(todos.length / todosPerPage);
   const [currentPage, setCurrentPage] = useState(1);
+  const [checkedCounter, setCheckedCounter] = useState(0);
+  const [checkAction, setCheckAction] = useState(Symbol('action'));
+  const [uncheckAction, setUncheckAction] = useState(Symbol('action'));
 
   const todosOnPage = sliceTodos(todos, currentPage, todosPerPage);
 
-  // const todosOnPage: TTodo[] = sliceTodos(todos, currentPage, todosPerPage);
-  console.log(todosOnPage);
+  useEffect(() => {
+    setCheckedCounter(0);
+    setCheckAll(false);
+
+    let count = 0;
+    for (let i = 0; i < todosOnPage.length; i++) {
+      if (todosOnPage[i].checked) {
+        count++;
+      }
+    }
+    if (count === todosOnPage.length && checkedCounter) setCheckAll(true);
+    setCheckedCounter(count);
+  }, [currentPage]);
+
+  useEffect(() => {
+    // console.log('uncheck');
+    if (checkedCounter) {
+      setCheckedCounter(checkedCounter - 1);
+      // setCheckAll(false);
+    }
+  }, [uncheckAction]);
+
+  useEffect(() => {
+    // console.log('check');
+    if (checkedCounter < todosOnPage.length) {
+      setCheckedCounter(checkedCounter + 1);
+    }
+  }, [checkAction]);
+
+  // useEffect(() => {
+  //   checkedOnPages[currentPage] = checkedCounter;
+  //   // setCheckedOnPages([...checkedOnPages]);
+  //   console.log(checkedOnPages[currentPage]);
+  // }, [checkedCounter]);
 
   return (
     <>
@@ -55,6 +89,7 @@ export const TodoList = observer(() => {
           checkAll={checkAll}
           setCheckAll={setCheckAll}
           todosOnPage={todosOnPage}
+          checkedCounter={checkedCounter}
         />
         {todosOnPage.length ? (
           <Todos
@@ -62,7 +97,10 @@ export const TodoList = observer(() => {
             todos={todosOnPage}
             checkAll={checkAll}
             setCheckAll={setCheckAll}
-            // setTodosOnPage={setTodosOnPage}
+            setCheckAction={setCheckAction}
+            setUncheckAction={setUncheckAction}
+            setCheckedCounter={setCheckedCounter}
+            checkedCounter={checkedCounter}
           />
         ) : (
           <p>No todos yet</p>

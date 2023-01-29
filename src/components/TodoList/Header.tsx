@@ -5,7 +5,6 @@ import { todos as items } from '../../store/Todos';
 import { debounce } from 'components/utils/debounce';
 
 import styles from './TodoList.module.scss';
-import { setSyntheticLeadingComments } from 'typescript';
 
 type TTodo = {
   title: string;
@@ -27,6 +26,7 @@ interface IHeader {
   checkedTodos: Set<string>;
   checkAll: boolean;
   todosOnPage: TTodo[];
+  checkedCounter: number;
 }
 
 export const Header = ({
@@ -37,6 +37,7 @@ export const Header = ({
   checkedTodos,
   checkAll,
   todosOnPage,
+  checkedCounter,
   setCheckAll,
 }: IHeader) => {
   const {
@@ -52,14 +53,15 @@ export const Header = ({
   const [styleTag, setStyleTag] = useState<string>(styles.headerNoChecked);
 
   useEffect(() => {
-    if (checkedTodos.size === getTodos().length && getTodos().length) {
+    if (checkedCounter === todosOnPage.length && checkedCounter) {
       setStyleTag(styles.headerCheckAll);
-    } else if (checkedTodos.size > 0) {
+      setCheckAll(true);
+    } else if (checkedCounter < todosOnPage.length && checkedCounter) {
       setStyleTag(styles.headerCheckSome);
     } else {
       setStyleTag(styles.headerNoChecked);
     }
-  }, [checkedTodos.size, checkAll]);
+  }, [checkedCounter, todosOnPage.length]);
 
   const onDeleteAll = () => {
     setStyleTag(styles.headerNoChecked);
@@ -89,7 +91,7 @@ export const Header = ({
         checkTodo(todo.id, false);
         checkedTodos.delete(todo.id);
       });
-      console.log(checkedTodos);
+      console.log('checkAll');
       return;
     }
     setCheckAll(e.currentTarget.checked);
@@ -98,7 +100,7 @@ export const Header = ({
       checkTodo(todo.id, true);
       checkedTodos.add(todo.id);
     });
-    console.log(checkedTodos);
+    console.log('checkAll');
   };
 
   const onSortClick: React.MouseEventHandler<HTMLInputElement> = e => {
