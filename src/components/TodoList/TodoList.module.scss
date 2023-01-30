@@ -64,6 +64,7 @@
   cursor: pointer;
 
   pointer-events: visible;
+  // margin: 0;
 }
 
 .todoList {
@@ -73,8 +74,6 @@
 .container {
   grid-template-columns: 20px 20px 300px 300px 40px 120px 120px;
   display: grid;
-
-
 
   margin-bottom: 10px;
 
@@ -107,8 +106,10 @@
 
   pointer-events: visible;
 }
+
 .li {
+  // pointer-events: none;
   cursor: grab;
-    background-color: #bfdbf7;
-    // padding: 5px;
+  background-color: #bfdbf7;
+  // padding: 5px;
 }

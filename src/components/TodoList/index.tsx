@@ -29,14 +29,14 @@ export const TodoList = observer(() => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState('');
 
-  const todos = items.searchAndSortTodos(searchValue, isSorted, isFiltered);
-  const [checkAll, setCheckAll] = useState(false);
+  const todos = items.searchAndSortTodos(searchValue, isSorted);
 
   const [todosPerPage, setTodosPerPage] = useState(5);
-  const totalPageCount = Math.ceil(todos.length / todosPerPage);
   const [currentPage, setCurrentPage] = useState(1);
+  const totalPageCount = Math.ceil(todos.length / todosPerPage);
 
   const [checkedCounter, setCheckedCounter] = useState(0);
+  const [checkAll, setCheckAll] = useState(false);
 
   const [checkAction, setCheckAction] = useState(Symbol('action'));
   const [uncheckAction, setUncheckAction] = useState(Symbol('action'));
@@ -44,22 +44,51 @@ export const TodoList = observer(() => {
     Symbol('action')
   );
 
-  const todosOnPage = sliceTodos(todos, currentPage, todosPerPage);
+  const [todosOnPage, setTodosOnPage] = useState(
+    sliceTodos(todos, currentPage, todosPerPage)
+  );
 
   useEffect(() => {
+    if (isFiltered) {
+      setTodosOnPage(
+        sliceTodos(todos, currentPage, todosPerPage).filter(
+          todo => todo.status === true
+        )
+      );
+      return;
+    }
+    setTodosOnPage(sliceTodos(todos, currentPage, todosPerPage));
+  }, [
+    todosPerPage,
+    todos.length,
+    currentPage,
+    checkAction,
+    uncheckAction,
+    checkAll,
+    deleteCheckedAction,
+    isFiltered,
+  ]);
+
+  useEffect(() => {
+    let count = 0;
+
     setCheckedCounter(0);
     setCheckAll(false);
 
-    let count = 0;
     for (let i = 0; i < todosOnPage.length; i++) {
-      if (todosOnPage[i].checked) {
-        count++;
-      }
+      if (todosOnPage[i].checked) count++;
     }
     if (count === todosOnPage.length && checkedCounter > 0) setCheckAll(true);
     else setCheckAll(false);
     setCheckedCounter(count);
-  }, [currentPage, deleteCheckedAction]);
+  }, [
+    currentPage,
+    todosPerPage,
+    deleteCheckedAction,
+    checkAction,
+    uncheckAction,
+    todosOnPage,
+  ]);
 
   useEffect(() => {
     if (checkedCounter) {

@@ -112,17 +112,8 @@ class Todos {
     return todos.filter(todo => todo.status === true);
   };
 
-  searchAndSortTodos = (value: string, sort?: boolean, filter?: boolean) => {
+  searchAndSortTodos = (value: string, sort?: boolean) => {
     const searchedTodos = this.searchTodos(value);
-    if (sort && filter) {
-      const sorted = this.getSortedTodos(searchedTodos);
-      const filtered = this.getDoneTodos(sorted);
-      return filtered;
-    }
-    if (filter) {
-      const filtered = this.getDoneTodos(searchedTodos);
-      return filtered;
-    }
     if (sort) {
       const sorted = this.getSortedTodos(searchedTodos);
       return sorted;

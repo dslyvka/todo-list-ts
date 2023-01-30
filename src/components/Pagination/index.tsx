@@ -155,14 +155,21 @@ export const Pagination = (props: iPagination) => {
     return [];
   }, [currentPage, totalPageCount, todosPerPage]);
 
-  // useEffect(() => {
-  //   setCheckAll(false);
-  // }, [currentPage]);
-  
-
   const onSelect: React.ChangeEventHandler<HTMLSelectElement> = e => {
     const value = parseInt(e.target.value);
     setTodosPerPage(value);
+    if (value === 5 && currentPage === 1) {
+      setCurrentPage(currentPage + 1);
+      return;
+    }
+    if (value === 5) {
+      setCurrentPage(currentPage);
+      return;
+    }
+    if (currentPage > 1 && value === 10) {
+      setCurrentPage(currentPage - 1);
+      return;
+    }
   };
 
   return (

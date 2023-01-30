@@ -42,6 +42,7 @@ export const Header = ({
   setDeleteCheckedAction,
   setCheckedCounter,
 }: IHeader) => {
+  
   const {
     getTodos,
     deleteTodo,

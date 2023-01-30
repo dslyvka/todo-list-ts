@@ -60,6 +60,8 @@ export const Todos = observer(
       const targetTag = target.tagName;
       const id = target.dataset.id as string;
 
+      if (targetTag === 'UL' ) return;
+      
       if (targetTag === 'INPUT' && target.dataset.checked) {
         onCheck(target.dataset.checked);
         return;
