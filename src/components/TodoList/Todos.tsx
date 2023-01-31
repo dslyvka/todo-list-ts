@@ -25,10 +25,19 @@ interface ITodos {
   setCheckAll: (value: boolean) => void;
   setCheckAction: (value: symbol) => void;
   setUncheckAction: (value: symbol) => void;
+  setDropAction: (value: symbol) => void;
+  setEditTodoAction: (value: symbol) => void;
 }
 
 export const Todos = observer(
-  ({ todos, setCheckAll, setCheckAction, setUncheckAction }: ITodos) => {
+  ({
+    todos,
+    setCheckAll,
+    setCheckAction,
+    setUncheckAction,
+    setDropAction,
+    setEditTodoAction,
+  }: ITodos) => {
     const {
       changeStatus,
       deleteTodo,
@@ -60,8 +69,8 @@ export const Todos = observer(
       const targetTag = target.tagName;
       const id = target.dataset.id as string;
 
-      if (targetTag === 'UL' ) return;
-      
+      if (targetTag === 'UL') return;
+
       if (targetTag === 'INPUT' && target.dataset.checked) {
         onCheck(target.dataset.checked);
         return;
@@ -109,6 +118,7 @@ export const Todos = observer(
       todos.forEach(todo => {
         changeOrder(todo, item, currentTodo!);
       });
+      setDropAction(Symbol('action'));
     };
 
     return (
@@ -185,7 +195,11 @@ export const Todos = observer(
         </ul>
         {isTodoModal && <TodoModal id={todoId} onClose={onTodoModalClose} />}
         {isEditTodoModal && (
-          <EditTodoModal id={todoId} onClose={onEditTodoModalClose} />
+          <EditTodoModal
+            id={todoId}
+            onClose={onEditTodoModalClose}
+            setEditTodoAction={setEditTodoAction}
+          />
         )}
       </>
     );

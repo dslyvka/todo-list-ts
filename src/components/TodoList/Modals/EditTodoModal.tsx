@@ -8,9 +8,14 @@ interface IEditTodoModal {
   id: string;
 
   onClose: () => void;
+  setEditTodoAction: (action: symbol) => void;
 }
 
-export const EditTodoModal = ({ id, onClose }: IEditTodoModal) => {
+export const EditTodoModal = ({
+  id,
+  onClose,
+  setEditTodoAction,
+}: IEditTodoModal) => {
   const { getTodo, editTodo } = todos;
   const todo = getTodo(id);
 
@@ -22,6 +27,7 @@ export const EditTodoModal = ({ id, onClose }: IEditTodoModal) => {
     const description = form.get('description') as string;
 
     editTodo(id, { title, description });
+    setEditTodoAction(Symbol('action'));
   };
 
   return (

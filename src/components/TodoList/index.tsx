@@ -43,6 +43,8 @@ export const TodoList = observer(() => {
   const [deleteCheckedAction, setDeleteCheckedAction] = useState(
     Symbol('action')
   );
+  const [dropAction, setDropAction] = useState(Symbol('action'));
+  const [editTodoAction, setEditTodoAction] = useState(Symbol('action'));
 
   const [todosOnPage, setTodosOnPage] = useState(
     sliceTodos(todos, currentPage, todosPerPage)
@@ -67,6 +69,8 @@ export const TodoList = observer(() => {
     checkAll,
     deleteCheckedAction,
     isFiltered,
+    dropAction,
+    editTodoAction,
   ]);
 
   useEffect(() => {
@@ -124,6 +128,8 @@ export const TodoList = observer(() => {
             setCheckAll={setCheckAll}
             setCheckAction={setCheckAction}
             setUncheckAction={setUncheckAction}
+            setDropAction={setDropAction}
+            setEditTodoAction={setEditTodoAction}
           />
         ) : (
           <p>No todos yet</p>
