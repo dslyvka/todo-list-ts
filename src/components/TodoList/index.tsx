@@ -6,7 +6,7 @@ import { todos as items } from 'store/Todos';
 
 import { Todos } from './Todos';
 import { Header } from './Header';
-import { Pagination } from 'components/Pagination';
+import { Pagination } from 'components/TodoList/Pagination';
 
 import { sliceTodos } from 'utils/sliceTodos';
 
