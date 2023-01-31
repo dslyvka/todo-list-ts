@@ -1,20 +1,12 @@
 import { useMemo, useCallback, useState, useEffect } from 'react';
 
+import { TTodo } from 'types/Todo';
+
 import { todos as items } from '../../store/Todos';
 
-import { debounce } from 'components/utils/debounce';
+import { debounce } from 'utils/debounce';
 
 import styles from './TodoList.module.scss';
-
-type TTodo = {
-  title: string;
-  description: string;
-  status: boolean;
-  id: string;
-  checked: boolean;
-  order: number;
-  number: number;
-};
 
 interface IHeader {
   onSort: (value: boolean) => void;
@@ -42,7 +34,6 @@ export const Header = ({
   setDeleteCheckedAction,
   setCheckedCounter,
 }: IHeader) => {
-  
   const {
     getTodos,
     deleteTodo,

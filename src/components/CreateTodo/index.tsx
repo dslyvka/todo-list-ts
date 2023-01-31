@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { observer } from 'mobx-react-lite';
 import { v4 as uuid } from 'uuid';
 
@@ -10,7 +8,7 @@ import { Input } from 'components/Input';
 import styles from './CreateTodo.module.scss';
 
 export const CreateTodo = observer(() => {
-  const { addTodo, getTodos, getOrder, getNumber, setOrder, setNumber } = todos;
+  const { addTodo, getOrder, getNumber, setOrder, setNumber } = todos;
   const order = getOrder();
   const number = getNumber();
 

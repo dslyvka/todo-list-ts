@@ -8,21 +8,9 @@ import { Todos } from './Todos';
 import { Header } from './Header';
 import { Pagination } from 'components/Pagination';
 
+import { sliceTodos } from 'utils/sliceTodos';
+
 import styles from './TodoList.module.scss';
-
-type TTodo = {
-  title: string;
-  description: string;
-  status: boolean;
-  id: string;
-  checked: boolean;
-  order: number;
-  number: number;
-};
-
-function sliceTodos(todos: TTodo[], page: number, todosPerPage: number) {
-  return todos.slice((page - 1) * todosPerPage, page * todosPerPage);
-}
 
 export const TodoList = observer(() => {
   const [isSorted, setIsSorted] = useState(false);
@@ -141,7 +129,6 @@ export const TodoList = observer(() => {
             setTodosPerPage={setTodosPerPage}
             todosPerPage={todosPerPage}
             totalPageCount={totalPageCount}
-            setCheckAll={setCheckAll}
           />
         ) : (
           <></>

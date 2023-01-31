@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { TTodo } from 'types/Todo';
+
 import { observer } from 'mobx-react-lite';
 import { toJS } from 'mobx';
 import { todos as items } from '../../store/Todos';
@@ -8,16 +10,6 @@ import { TodoModal } from './Modals/TodoModal';
 import { EditTodoModal } from './Modals/EditTodoModal';
 
 import styles from './TodoList.module.scss';
-
-type TTodo = {
-  title: string;
-  description: string;
-  status: boolean;
-  id: string;
-  checked: boolean;
-  order: number;
-  number: number;
-};
 
 interface ITodos {
   todos: TTodo[];

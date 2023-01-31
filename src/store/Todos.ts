@@ -1,14 +1,6 @@
-import { makeAutoObservable, toJS } from 'mobx';
+import { TTodo } from 'types/Todo';
 
-type TTodo = {
-  title: string;
-  description: string;
-  status: boolean;
-  id: string;
-  checked: boolean;
-  order: number;
-  number: number;
-};
+import { makeAutoObservable, toJS } from 'mobx';
 
 interface ITodos {
   [id: string]: TTodo;
@@ -80,10 +72,6 @@ class Todos {
       if (index + 1 !== this.todos[todo.id].order) {
         this.todos[todo.id] = { ...this.todos[todo.id], order: index + 1 };
       }
-      // if (index + 1 === array.length) {
-      //   this.setOrder(index + 2);
-      //   this.setNumber(index + 2);
-      // }
     });
   };
 
