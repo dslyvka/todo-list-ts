@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
 import { todos as items } from 'store/Todos';
+
+import { debounce } from 'utils/debounce';
 
 import { Todos } from './Todos';
 import { Header } from './Header';
@@ -16,6 +18,11 @@ export const TodoList = observer(() => {
   const [isSorted, setIsSorted] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+  const debouncedChangeHandler = useCallback(debounce(changeHandler, 300), []);
 
   const todos = items.searchAndSortTodos(searchValue, isSorted);
 
@@ -109,6 +116,7 @@ export const TodoList = observer(() => {
           checkedCounter={checkedCounter}
           setDeleteCheckedAction={setDeleteCheckedAction}
           setCheckedCounter={setCheckedCounter}
+          onChange={debouncedChangeHandler}
         />
         {todosOnPage.length ? (
           <Todos
